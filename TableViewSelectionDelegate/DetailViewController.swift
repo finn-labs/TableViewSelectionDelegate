@@ -1,8 +1,14 @@
 import UIKit
 
-class DetailViewController: UIViewController {
+protocol DetailViewControllerDelegate: class {
+    func detailViewController(_ detailViewController: DetailViewController, didSelectTakeMeBackButtonForOption option: Option?)
+}
 
+class DetailViewController: UIViewController {
     // MARK: - Private properties
+    weak var delegate: DetailViewControllerDelegate?
+
+    var option: Option?
 
     private lazy var textLabel: UILabel = {
         let label = UILabel()
@@ -20,12 +26,7 @@ class DetailViewController: UIViewController {
         return scroll
     }()
 
-    // MARK: - Public properties
-
-    public var action: (() -> Void)?
-
     // MARK: - Setup
-
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nil, bundle: nil)
         setup()
@@ -37,7 +38,6 @@ class DetailViewController: UIViewController {
 }
 
 // MARK: - Private functions
-
 private extension DetailViewController {
 
     func createButton() -> UIButton? {
@@ -63,6 +63,7 @@ private extension DetailViewController {
     }
 
     func setup() {
+        title = option?.title
         view.backgroundColor = .white
         view.addSubview(scrollView)
         scrollView.addSubview(textLabel)
@@ -84,7 +85,7 @@ private extension DetailViewController {
     }
 
     @objc func handleButtonPressed() {
-        action?()
+        delegate?.detailViewController(self, didSelectTakeMeBackButtonForOption: self.option)
     }
 
 }
