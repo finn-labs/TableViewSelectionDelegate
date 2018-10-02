@@ -31,14 +31,19 @@ class ViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailViewController = DetailViewController()
-        detailViewController.action = {
-            self.navigationController?.popViewController(animated: true)
-            let option = self.options[indexPath.row]
-            let alertController = UIAlertController(title: "Message", message: option.title, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        }
+        detailViewController.delegate = self
         navigationController?.pushViewController(detailViewController, animated: true)
+    }
+}
+
+extension ViewController: DetailViewControllerDelegate {
+    func detailViewControllerDidSelectTakeMeBackButton(_ detailViewController: DetailViewController) {
+        guard let indexPath = tableView.indexPathForSelectedRow else { return }
+        self.navigationController?.popViewController(animated: true)
+        let option = self.options[indexPath.row]
+        let alertController = UIAlertController(title: "Message", message: option.title, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
 }
 

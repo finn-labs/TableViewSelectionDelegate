@@ -1,8 +1,12 @@
 import UIKit
 
-class DetailViewController: UIViewController {
+protocol DetailViewControllerDelegate: class {
+    func detailViewControllerDidSelectTakeMeBackButton(_ detailViewController: DetailViewController)
+}
 
+class DetailViewController: UIViewController {
     // MARK: - Private properties
+    weak var delegate: DetailViewControllerDelegate?
 
     private lazy var textLabel: UILabel = {
         let label = UILabel()
@@ -19,10 +23,6 @@ class DetailViewController: UIViewController {
         scroll.alwaysBounceVertical = true
         return scroll
     }()
-
-    // MARK: - Public properties
-
-    public var action: (() -> Void)?
 
     // MARK: - Setup
 
@@ -84,7 +84,7 @@ private extension DetailViewController {
     }
 
     @objc func handleButtonPressed() {
-        action?()
+        delegate?.detailViewControllerDidSelectTakeMeBackButton(self)
     }
 
 }
